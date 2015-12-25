@@ -24,13 +24,13 @@ gulp.task('open', function () {
 });
 
 gulp.task('js', function () {
-  gulp.src('./*.js')
+  gulp.src('./js/*.js')
     .pipe(connect.reload());
 });
  
 gulp.task('watch', function () {
   gulp.watch(['./*.html'], ['html']);
-  gulp.watch(['./*.js'], ['js']);
+  gulp.watch(['./js/*.js'], ['js']);
 });
  
 gulp.task('default', ['connect', 'open', 'watch']);
