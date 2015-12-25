@@ -1,8 +1,8 @@
 var canvas = document.createElement('canvas')
 , context = canvas.getContext('2d')
 , particles = {}
-, maxParticles = 1000
-, particlesPerStage = 5
+, maxParticles = 400
+, particlesPerStage = 15
 ;
 
 resize();
@@ -51,7 +51,7 @@ function resize() {
 
 function clearCanvas() {
     context.globalCompositeOperation = "source-over";
-    context.fillStyle = "rgba(0, 0, 0, 0.4)";
+    context.fillStyle = "rgba(0, 0, 0, 0.8)";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.globalCompositeOperation = "lighter";
 }
@@ -60,9 +60,11 @@ function Particle(x, y) {
     var particleScope = this;
 
     this.radius = 3;
+    this.radiusChangeRate = Math.random() / 5;
+
     // this.maxSpeed = Math.random() * 2;
     this.maxSpeed = 0.9;
-    this.maxLife = Math.floor(Math.random() * 10);
+    this.maxLife = Math.floor(Math.random() * 14);
     this.x = x;
     this.y = y;
 
@@ -72,15 +74,15 @@ function Particle(x, y) {
     this.vyDirection = (Math.random() < 0.3 ? -1 : 1);
     this.vy = (Math.random() * this.maxSpeed) * this.vyDirection;
 
-    this.color = (new window.RColor()).get(false, 0.9, Math.random());
-    this.timeOfDeath = (+new Date()) + Math.floor(Math.random() * this.maxLife) * 1000;
+    this.color = (new window.RColor()).get(false, 0.7, Math.random());
+    // this.timeOfDeath = (+new Date()) + Math.floor(Math.random() * this.maxLife) * 1000;
 
     this.id = tools.guid();
 
     this.draw = function () {
-        if (+new Date() >= particleScope.timeOfDeath) {
-            return particleScope.remove();
-        }
+        // if (+new Date() >= particleScope.timeOfDeath) {
+        //     return particleScope.remove();
+        // }
 
         drawCircle({
             x: particleScope.x,
@@ -93,17 +95,17 @@ function Particle(x, y) {
     };
 
     this.update = function () {
-        if (Math.random() < 0.004) {
+        if (Math.random() < 0.007) {
             particleScope.vxDirection *= -1;
             particleScope.vx *= particleScope.vxDirection;
         }
 
-        if (Math.random() < 0.004) {
+        if (Math.random() < 0.007) {
             particleScope.vyDirection *= -1;
             particleScope.vy *= particleScope.vyDirection; 
         }
 
-        particleScope.radius -= 0.015;
+        particleScope.radius -= particleScope.radiusChangeRate;
         
         if (particleScope.radius < 0) {
             return particleScope.remove();
