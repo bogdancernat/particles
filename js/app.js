@@ -1,7 +1,8 @@
 var canvas = document.createElement('canvas')
 , context = canvas.getContext('2d')
 , particles = {}
-, particleNum = 20
+, maxParticles = 1000
+, particlesPerStage = 5
 ;
 
 resize();
@@ -27,7 +28,11 @@ function animate () {
 }
 
 function createParticles () {
-    for (var i = 0; i < particleNum; i++) {
+    for (var i = 0; i < particlesPerStage; i++) {
+        if (Object.keys(particles).length >= maxParticles) {
+            return;
+        }
+
         var p = new Particle(canvas.width / 2, canvas.height / 2);
         particles[p.id] = p;
     }
@@ -54,17 +59,18 @@ function clearCanvas() {
 function Particle(x, y) {
     var particleScope = this;
 
-    this.radius = 2;
-    this.maxSpeed = Math.random() * 2;
+    this.radius = 3;
+    // this.maxSpeed = Math.random() * 2;
+    this.maxSpeed = 0.9;
     this.maxLife = Math.floor(Math.random() * 10);
     this.x = x;
     this.y = y;
 
     this.vxDirection = (Math.random() < 0.3 ? -1 : 1);
-    this.vx = (Math.random() * this.maxSpeed + 1) * this.vxDirection;
+    this.vx = (Math.random() * this.maxSpeed) * this.vxDirection;
 
     this.vyDirection = (Math.random() < 0.3 ? -1 : 1);
-    this.vy = (Math.random() * this.maxSpeed + 1) * this.vyDirection;
+    this.vy = (Math.random() * this.maxSpeed) * this.vyDirection;
 
     this.color = (new window.RColor()).get(false, 0.9, Math.random());
     this.timeOfDeath = (+new Date()) + Math.floor(Math.random() * this.maxLife) * 1000;
@@ -87,12 +93,12 @@ function Particle(x, y) {
     };
 
     this.update = function () {
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.004) {
             particleScope.vxDirection *= -1;
             particleScope.vx *= particleScope.vxDirection;
         }
 
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.004) {
             particleScope.vyDirection *= -1;
             particleScope.vy *= particleScope.vyDirection; 
         }
