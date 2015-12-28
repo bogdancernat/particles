@@ -1,3 +1,3 @@
 ### Basic javascript particle effect
 
-Run `gulp` to start it.
+Run `npm install` and then `gulp` to start it.
